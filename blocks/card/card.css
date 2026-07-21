@@ -1,85 +1,103 @@
-.card {
-  --spacing-default: var(--spacing-l);
+/* ===== Cards block wrapper / grid layout ===== */
+.cards > ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 24px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
 
-  overflow-wrap: break-word;
-  box-shadow: 0 1px 6px 0 rgb(0 0 0 / 12%);
+.cards > ul > li {
+  list-style: none;
+}
+
+/* ===== Card inner wrapper ===== */
+.card-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
   overflow: hidden;
-  background-color: light-dark(var(--color-gray-100), var(--color-gray-900));
-  color: light-dark(var(--color-dark), var(--color-light));
-  transition: all 0.25s ease-in-out;
+  background: #fff;
+}
 
-  .card-inner {
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    height: 100%;
-  }
+/* ===== Picture container ===== */
+.card-picture-container {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+}
 
-  &:not(.quiet) {
-    .card-picture-container {
-      position: relative;
-      padding-bottom: 60%;
+.card-picture-container picture,
+.card-picture-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
 
-      picture {
-        position: absolute;
-        inset: 0;
-        opacity: 0.85;
-        transition: opacity 0.25s ease-in-out;
-      }
+/* ===== Content container ===== */
+.card-content-container {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 20px 20px;
+  flex: 1;
+}
 
-      img {
-        object-fit: cover;
-        width: 100%;
-        height: 100%;
-      }
-    }
-  }
+/* ===== Eyebrow (debug: bright pink, uppercase, small) ===== */
+.card-content-container .card-eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #d0016b;
+  margin: 0 0 6px 0;
+}
 
-  .card-content-container {
-    padding: var(--spacing-default);
+/* ===== Heading (debug: large, bold, black) ===== */
+.card-content-container .card-heading {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #000000;
+  margin: 0 0 10px 0;
+}
 
-    :first-child {
-      margin-top: 0;
-      font-size: 16px;
-    }
+/* ===== Description (debug: gray, normal weight, smaller) ===== */
+.card-content-container .card-description {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #555555;
+  margin: 0 0 12px 0;
+}
 
-    :last-child {
-      margin-bottom: 0;
-    }
+/* ===== CTA ===== */
+.card-cta-container {
+  margin-top: auto;
+  padding: 0 20px 20px;
+}
 
-    &:has(+ .card-cta-container) {
-      padding: var(--spacing-default) var(--spacing-default) var(--spacing-m) var(--spacing-default);
-    }
-  }
+.card-cta-container a {
+  display: inline-block;
+  padding: 10px 20px;
+  background: #d0016b;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 4px;
+  font-size: 14px;
+}
 
-  .card-cta-container {
-    padding: 0 var(--spacing-default) var(--spacing-default) var(--spacing-default);
-    margin: 0;
-    display: flex;
-    justify-content: end;
-  }
+.card-cta-container a:hover {
+  background: #a30154;
+}
 
-  &:not(.quiet):hover {
-    transform: scale(1.005);
-    box-shadow: 0 2px 8px 0 rgb(0 0 0 / 16%);
-
-    picture {
-      opacity: 1;
-    }
-  }
-
-  /* Variations */
-  &.center {
-    text-align: center;
-  }
-
-  &.quiet {
-    --spacing-default: 0;
-
-    box-shadow: initial;
-    background-color: initial;
-
-    .card-content-container * {
-      margin: 6px;
-    }
-  }
+/* ===== Fallback: any un-classed <p> left in content container ===== */
+.card-content-container > p:not(.card-eyebrow):not(.card-description) {
+  font-size: 14px;
+  color: #999999;
+  font-style: italic;
 }
