@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Products</title>
+  <meta name="description" content="Browse our product catalog">
+</head>
+<body>
+  <header></header>
+  <main>
+    <div class="hero">
+      <div>
+        <div>
+          <h1>Our Products</h1>
+          <p>Browse our full catalog of tools and platforms</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-filter">
+      <div>
+        <div>All</div>
+        <div>SaaS</div>
+        <div>Mobile</div>
+        <div>Desktop</div>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div>
+        {{#data}}
+        <div>
+          <div>
+            <picture>
+              <img src="{{thumbnailUrl}}" alt="{{name}}">
+            </picture>
+          </div>
+          <div>
+            <p>{{name}}</p>
+            <p>{{tagline}}</p>
+          </div>
+          <div>
+            <p>{{category}}</p>
+            <p>{{status}}</p>
+            <p><a href="/products/{{slug}}">View Details</a></p>
+          </div>
+        </div>
+        {{/data}}
+      </div>
+    </div>
+
+  </main>
+  <footer></footer>
+</body>
+</html>
