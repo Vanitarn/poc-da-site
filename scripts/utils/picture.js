@@ -33,3 +33,11 @@ export function createPicture({ src, alt = '', eager = false, breakpoints = DEF_
 
   return picture;
 }
+
+export function setBackgroundFocus(img) {
+  const { title } = img.dataset;
+  if (!title?.includes('data-focal')) return;
+  delete img.dataset.title;
+  const [x, y] = title.split(':')[1].split(',');
+  img.style.objectPosition = `${x}% ${y}%`;
+}

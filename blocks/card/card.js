@@ -1,3 +1,5 @@
+import { setBackgroundFocus } from '../../scripts/utils/picture.js';
+
 export default function init(el) {
   const inner = el.querySelector(':scope > div');
   if (!inner) return;
@@ -6,6 +8,8 @@ export default function init(el) {
   // Decorate picture
   const pic = el.querySelector('picture');
   if (pic) {
+    const img = pic.querySelector('img');
+    if (img) setBackgroundFocus(img);
     const picPara = pic.closest('p');
     if (picPara) {
       const picDiv = document.createElement('div');
