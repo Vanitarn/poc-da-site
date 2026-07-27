@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DA.live Page Reporter</title>
+  <link rel="icon" href="data:,">
+  <!-- SheetJS for .xlsx export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <!-- App styles -->
+  <link rel="stylesheet" href="/tools/reporting/reporting.css">
+</head>
+<body>
+<div class="shell">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <h1>Page reporter</h1>
+      <p>Track publish, preview, and draft status across your DA.live site</p>
+    </div>
+  </div>
+
+  <!-- Config -->
+  <div class="config-card">
+    <div class="config-card-title">Connection</div>
+    <div class="field-grid">
+      <div class="field">
+        <label for="orgInput">Organisation</label>
+        <input id="orgInput" placeholder="e.g. my-org" autocomplete="off" />
+      </div>
+      <div class="field">
+        <label for="siteInput">Site / repo</label>
+        <input id="siteInput" placeholder="e.g. my-site" autocomplete="off" />
+      </div>
+    </div>
+    <div class="field-grid">
+      <div class="field">
+        <label for="pathInput">Root path <span style="font-weight:400;color:var(--text-3)">(optional)</span></label>
+        <input id="pathInput" placeholder="e.g. /en" value="/" autocomplete="off" />
+      </div>
+      <div class="field" id="tokenField" style="display:none">
+        <label for="tokenInput">Bearer token <span style="font-weight:400;color:var(--text-3)">(only if not signed in)</span></label>
+        <input id="tokenInput" type="password" placeholder="••••••••••••" autocomplete="off" />
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="fetchPages()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
+        Fetch pages
+      </button>
+      <span class="status-msg" id="fetchStatus"></span>
+    </div>
+  </div>
+
+  <!-- Report section -->
+  <div id="reportSection" style="display:none">
+
+    <!-- Summary -->
+    <div class="summary">
+      <div class="stat"><div class="stat-label">Total</div><div class="stat-val c-total" id="sTotal">0</div></div>
+      <div class="stat"><div class="stat-label">Published</div><div class="stat-val c-pub" id="sPub">0</div></div>
+      <div class="stat"><div class="stat-label">Preview only</div><div class="stat-val c-prev" id="sPrev">0</div></div>
+      <div class="stat"><div class="stat-label">Draft</div><div class="stat-val c-draft" id="sDraft">0</div></div>
+      <div class="stat"><div class="stat-label">Unpublished</div><div class="stat-val c-unpub" id="sUnpub">0</div></div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <div class="search-wrap">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input id="searchInput" placeholder="Search page path…" oninput="applyFilters()" />
+      </div>
+      <select id="statusFilter" onchange="applyFilters()" style="width:148px">
+        <option value="">All statuses</option>
+        <option value="published">Published</option>
+        <option value="preview">Preview only</option>
+        <option value="draft">Draft</option>
+        <option value="unpublished">Unpublished</option>
+      </select>
+      <span class="row-count" id="rowCount"></span>
+      <button class="btn btn-success" onclick="exportExcel()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export Excel
+      </button>
+      <button class="btn" onclick="exportCSV()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export CSV
+      </button>
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th class="sortable" onclick="sortBy('path')" style="width:26%">Page path <span class="sort-arrow" id="arr-path"></span></th>
+            <th class="sortable" onclick="sortBy('status')" style="width:11%">Status <span class="sort-arrow" id="arr-status"></span></th>
+            <th class="sortable" onclick="sortBy('previewedBy')" style="width:13%">Previewed by <span class="sort-arrow" id="arr-previewedBy"></span></th>
+            <th class="sortable" onclick="sortBy('publishedBy')" style="width:13%">Published by <span class="sort-arrow" id="arr-publishedBy"></span></th>
+            <th class="sortable" onclick="sortBy('previewDate')" style="width:13%">Previewed <span class="sort-arrow" id="arr-previewDate"></span></th>
+            <th class="sortable" onclick="sortBy('publishedDate')" style="width:13%">Published <span class="sort-arrow" id="arr-publishedDate"></span></th>
+            <th class="sortable" onclick="sortBy('lastModified')" style="width:13%">Last modified <span class="sort-arrow" id="arr-lastModified"></span></th>
+            <th style="width:3%"></th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<!-- App logic (ES module: imports the DA SDK, exposes handlers) -->
+<script type="module" src="/tools/reporting/reporting.js"></script>
+</body>
+</html>
