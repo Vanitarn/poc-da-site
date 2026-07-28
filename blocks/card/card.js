@@ -9,7 +9,6 @@ export default function init(el) {
   const pic = el.querySelector('picture');
   if (pic) {
     const img = pic.querySelector('img');
-    if (img) setBackgroundFocus(img);
     const picPara = pic.closest('p');
     if (picPara) {
       const picDiv = document.createElement('div');
@@ -18,6 +17,7 @@ export default function init(el) {
       inner.insertAdjacentElement('afterbegin', picDiv);
       picPara.remove();
     }
+    if (img) setBackgroundFocus(img);
   }
 
   // Decorate content container
