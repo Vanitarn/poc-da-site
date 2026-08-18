@@ -5,4 +5,4 @@ package.json
 package-lock.json
 test/
 workers/
-/tools/sanity
+/tools/sanity/

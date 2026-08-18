@@ -1,3 +1,4 @@
+// sanity ui
 import { i as e, n as t, r as n, t as r } from "./sanity-core.js";
 //#region \0rolldown/runtime.js
 var i = Object.create, a = Object.defineProperty, o = Object.getOwnPropertyDescriptor, s = Object.getOwnPropertyNames, c = Object.getPrototypeOf, l = Object.prototype.hasOwnProperty, u = (e, t) => () => (t || (e((t = { exports: {} }).exports, t), e = null), t.exports), d = (e, t, n, r) => {

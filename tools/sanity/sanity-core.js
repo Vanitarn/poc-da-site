@@ -1,3 +1,4 @@
+// sanity core
 //#region src/lib/selector.ts
 function e(e) {
 	return typeof CSS < "u" && typeof CSS.escape == "function" ? CSS.escape(e) : e.replace(/[^a-zA-Z0-9_-]/g, (e) => `\\${e}`);
