@@ -9,3 +9,8 @@ helix-importer-ui
 .idea
 .wrangler
 .claude
+
+.hlx\.da-token.json
+
+content
+/tools/sanity

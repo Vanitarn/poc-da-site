@@ -46,3 +46,17 @@ await loadPage();
   const hasQE = searchParams.has('quick-edit');
   if (hasQE) import('../tools/quick-edit/quick-edit.js').then((mod) => mod.default());
 }());
+
+function initSanity() {
+  const sidekick = document.querySelector('aem-sidekick');
+  if (!sidekick) {
+    document.addEventListener('sidekick-ready', initSanity, { once: true });
+    return;
+  }
+  sidekick.addEventListener('custom:sanity', async (event) => {
+    const { mount } = await import('../tools/sanity/index.js');
+    mount(event.detail);
+  });
+}
+
+initSanity();
