@@ -1,4 +1,5 @@
 import { r as e } from "./sanity-core.js";
+// sanity plugin entry
 //#region src/plugin-entry.ts
 e();
 var t = !1;
