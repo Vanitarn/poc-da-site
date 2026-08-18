@@ -54,7 +54,7 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: #d0016b;
-  margin: 0 0 6px 0;
+  margin: 0 0 6px;
 }
 
 /* ===== Heading (debug: large, bold, black) ===== */
@@ -62,8 +62,8 @@
   font-size: 22px;
   font-weight: 700;
   line-height: 1.25;
-  color: #000000;
-  margin: 0 0 10px 0;
+  color: #000;
+  margin: 0 0 10px;
 }
 
 /* ===== Description (debug: gray, normal weight, smaller) ===== */
@@ -71,8 +71,8 @@
   font-size: 14px;
   font-weight: 400;
   line-height: 1.5;
-  color: #555555;
-  margin: 0 0 12px 0;
+  color: #555;
+  margin: 0 0 12px;
 }
 
 /* ===== CTA ===== */
@@ -97,8 +97,8 @@
 }
 
 /* ===== Fallback: any un-classed <p> left in content container ===== */
-.card-content-container > p:not(.card-eyebrow):not(.card-description) {
+.card-content-container > p:not(.card-eyebrow, .card-description) {
   font-size: 14px;
-  color: #999999;
+  color: #999;
   font-style: italic;
 }
