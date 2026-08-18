@@ -5,6 +5,10 @@ export default async function init(sk) {
   // Handle button clicks
   sk.addEventListener('custom:scheduler', toggleScheduler);
   sk.addEventListener('custom:quick-edit', initQuickEdit);
+  sk.addEventListener('custom:sanity', async (e) => {
+    const { mount } = await import('../sanity/index.js');
+    mount(e.detail);
+  });
 
   // Show after all decoration is finished
   sk.classList.add('is-ready');
